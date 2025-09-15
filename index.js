@@ -2,7 +2,7 @@
 
 const libQ = require('kew');
 const fs = require('fs-extra');
-const LCD = require('lcd-pcf8574');
+const LCD = require('lcdi2c');
 
 let lcd;
 
