@@ -1,0 +1,21 @@
+{
+  "name": "volumio-hd44780-i2c",
+  "version": "1.0.0",
+  "description": "Volumio 3 Plugin for HD44780 LCD (16x2/20x4) via PCF8574 I2C",
+  "main": "index.js",
+  "scripts": {
+    "install": "sh install.sh",
+    "uninstall": "sh uninstall.sh"
+  },
+  "author": "Schuppe, Kevin",
+  "license": "MIT",
+  "volumio_info": {
+    "prettyName": "HD44780 I2C LCD",
+    "plugin_type": "miscellanea",
+    "plugin_name": "hd44780_i2c"
+  },
+  "dependencies": {
+    "i2c-bus": "^5.2.2",
+    "lcd-pcf8574": "^1.1.1"
+  }
+}
