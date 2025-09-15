@@ -10,6 +10,6 @@
     "plugin_type": "miscellanea",
     "version": "1.0.0",
     "core_version": "3.0.0",
-    "homepage": "https://github.com/deinrepo/volumio-hd44780-i2c"
+    "homepage": "https://github.com/DasSchuppe/volumio-hd44780-i2c"
   }
 }

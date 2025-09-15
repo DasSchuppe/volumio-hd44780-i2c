@@ -26,13 +26,13 @@ module.exports = class Hd44780Plugin {
     try {
       lcd = new LCD('/dev/i2c-1', this.config.i2cAddress, this.config.cols, this.config.rows);
       lcd.clear();
-      lcd.setCursor(0, 0);
+      lcd.setCursor(0,0);
       lcd.print('Volumio Ready');
       this.commandRouter.volumioAddQueueObserver(this.onQueueChange.bind(this));
       defer.resolve();
-    } catch (e) {
+    } catch(e) {
       this.logger.error('LCD init failed: ' + e);
-      defer.reject(new Error('LCD init failed'));
+      defer.resolve(); // trotzdem starten
     }
     return defer.promise;
   }
@@ -40,10 +40,10 @@ module.exports = class Hd44780Plugin {
   onStop() {
     const defer = libQ.defer();
     try {
-      if (lcd) lcd.clear();
+      if(lcd) lcd.clear();
       defer.resolve();
-    } catch (e) {
-      defer.reject(new Error('Error stopping plugin'));
+    } catch(e) {
+      defer.reject(e);
     }
     return defer.promise;
   }
@@ -56,14 +56,11 @@ module.exports = class Hd44780Plugin {
     const defer = libQ.defer();
     try {
       let uiConfig = fs.readJsonSync(__dirname + '/UIConfig.json');
-      // Werte aus config.json übernehmen
       uiConfig.page.options.forEach(opt => {
-        if (opt.id in this.config) {
-          opt.value = this.config[opt.id];
-        }
+        if(opt.id in this.config) opt.value = this.config[opt.id];
       });
       defer.resolve(uiConfig);
-    } catch (e) {
+    } catch(e) {
       defer.reject(e);
     }
     return defer.promise;
@@ -72,42 +69,35 @@ module.exports = class Hd44780Plugin {
   saveConfig(data) {
     const defer = libQ.defer();
     try {
-      this.config.i2cAddress = parseInt(data.i2cAddress, 16);
+      this.config.i2cAddress = parseInt(data.i2cAddress,16);
       this.config.cols = parseInt(data.cols);
       this.config.rows = parseInt(data.rows);
       fs.writeJsonSync(this.configFile, this.config);
       defer.resolve();
-    } catch (e) {
+    } catch(e) {
       defer.reject(e);
     }
     return defer.promise;
   }
 
   loadConfig() {
-    if (fs.existsSync(this.configFile)) {
-      this.config = fs.readJsonSync(this.configFile, { throws: false }) || {};
-    }
-    if (!this.config.i2cAddress) this.config.i2cAddress = 0x27;
-    if (!this.config.cols) this.config.cols = 16;
-    if (!this.config.rows) this.config.rows = 2;
+    if(fs.existsSync(this.configFile)) this.config = fs.readJsonSync(this.configFile,{throws:false}) || {};
+    if(!this.config.i2cAddress) this.config.i2cAddress = 0x27;
+    if(!this.config.cols) this.config.cols = 16;
+    if(!this.config.rows) this.config.rows = 2;
   }
 
   onQueueChange() {
-    if (!lcd) return;
+    if(!lcd) return;
     let state = this.commandRouter.volumioGetState();
-    if (state.status === 'play') {
-      let line1 = `${state.artist || ''} - ${state.title || ''}`.substring(0, this.config.cols);
-      let line2 = `${Math.floor((state.seek || 0)/1000)}s/${state.duration || 0}s`.substring(0, this.config.cols);
-      lcd.setCursor(0, 0);
-      lcd.print(line1);
-      if (this.config.rows > 1) {
-        lcd.setCursor(0, 1);
-        lcd.print(line2);
-      }
+    if(state.status === 'play') {
+      let line1 = `${state.artist||''} - ${state.title||''}`.substring(0,this.config.cols);
+      let line2 = `${Math.floor((state.seek||0)/1000)}s/${state.duration||0}s`.substring(0,this.config.cols);
+      lcd.setCursor(0,0); lcd.print(line1);
+      if(this.config.rows>1){ lcd.setCursor(0,1); lcd.print(line2); }
     } else {
-      lcd.setCursor(0, 0);
-      lcd.print('Volumio Idle');
-      if (this.config.rows > 1) lcd.setCursor(0, 1).print(' '.repeat(this.config.cols));
+      lcd.setCursor(0,0); lcd.print('Volumio Idle');
+      if(this.config.rows>1){ lcd.setCursor(0,1); lcd.print(' '.repeat(this.config.cols)); }
     }
   }
 };
