@@ -1,6 +1,6 @@
 {
   "name": "volumio-hd44780-i2c",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Volumio plugin for HD44780 LCD via PCF8574 (pure JS driver)",
   "main": "index.js",
   "author": "DasSchuppe",
@@ -8,7 +8,7 @@
   "volumio_info": {
     "prettyName": "HD44780 I2C LCD (Pure JS)",
     "plugin_type": "miscellanea",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "core_version": "3.0.0",
     "homepage": "https://github.com/DasSchuppe/volumio-hd44780-i2c"
   }
