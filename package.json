@@ -15,7 +15,6 @@
     "plugin_name": "hd44780_i2c"
   },
   "dependencies": {
-    "i2c-bus": "^5.2.2",
-    "lcdi2c": "^2.0.4"
+    "i2c-bus": "^5.2.2"
   }
 }
