@@ -6,7 +6,7 @@ class LCD {
     this.rows = rows;
     this.addr = addr;
     this.fd = fs.openSync(bus, 'r+');
-    this.backlight = 0x08; // Backlight ON
+    this.backlight = 0x08;
     this.init();
   }
 
@@ -15,9 +15,9 @@ class LCD {
   }
 
   write4bits(val) {
-    fs.writeSync(this.fd, Buffer.from([val | this.backlight | 0x04])); // enable high
+    fs.writeSync(this.fd, Buffer.from([val | this.backlight | 0x04]));
     this.sleep(1);
-    fs.writeSync(this.fd, Buffer.from([val | this.backlight & ~0x04])); // enable low
+    fs.writeSync(this.fd, Buffer.from([val | this.backlight & ~0x04]));
   }
 
   send(val, mode) {
