@@ -1,7 +1,4 @@
 const fs = require('fs');
-const ioctl = require('ioctl'); // Volumio hat meist ioctl vorinstalliert
-
-const I2C_SLAVE = 0x0703;
 
 class LCD {
   constructor(bus = '/dev/i2c-1', addr = 0x27, cols = 16, rows = 2) {
@@ -9,7 +6,7 @@ class LCD {
     this.rows = rows;
     this.addr = addr;
     this.fd = fs.openSync(bus, 'r+');
-    ioctl(this.fd, I2C_SLAVE, addr);
+    this.backlight = 0x08; // Backlight ON
     this.init();
   }
 
@@ -18,20 +15,19 @@ class LCD {
   }
 
   write4bits(val) {
-    fs.writeSync(this.fd, Buffer.from([val | 0x08])); // enable=1
+    fs.writeSync(this.fd, Buffer.from([val | this.backlight | 0x04])); // enable high
     this.sleep(1);
-    fs.writeSync(this.fd, Buffer.from([val & ~0x04])); // enable=0
+    fs.writeSync(this.fd, Buffer.from([val | this.backlight & ~0x04])); // enable low
   }
 
   send(val, mode) {
-    let high = val & 0xf0;
-    let low = (val << 4) & 0xf0;
-    this.write4bits(high | mode);
-    this.write4bits(low | mode);
+    this.write4bits(val & 0xF0 | mode);
+    this.write4bits((val << 4) & 0xF0 | mode);
   }
 
   command(cmd) {
     this.send(cmd, 0x00);
+    this.sleep(2);
   }
 
   writeChar(ch) {
