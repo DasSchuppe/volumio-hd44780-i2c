@@ -12,8 +12,10 @@
   "volumio_info": {
     "prettyName": "HD44780 LCD (I2C)",
     "plugin_type": "miscellanea",
+    "core_version": ">=3.0.0",
     "icon": "fa-tachometer",
     "version": "1.0.0",
+    "homepage": "https://github.com/DasSchuppe/volumio-hd44780-i2c",
     "platforms": [
       "arm",
       "x86"
