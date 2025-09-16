@@ -16,7 +16,8 @@
     "icon": "fa-tv"
   },
   "dependencies": {
-    "i2c-bus": "^5.2.3",
+    "epoll": "^4.0.2",
+    "i2c-bus": "^5.2.2",
     "lcd": "^0.2.1"
   }
 }
