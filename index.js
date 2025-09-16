@@ -1,63 +1,42 @@
 'use strict';
 
-const LcdDriver = require('./lib/lcd-driver');
+const fs = require('fs');
+const path = require('path');
+const LCDDriver = require('./lcd-driver');
 
-module.exports = class Hd44780Plugin {
-  constructor(context) {
-    this.context = context;
-    this.logger = context.logger;
-    this.configManager = context.configManager;
-    this.commandRouter = context.coreCommand;
+let config = {};
+let lcd = null;
 
-    this.configFile = this.commandRouter.pluginManager.getConfigurationFile(
-      this.context,
-      'config.json'
-    );
-    this.config = new this.configManager(this.configFile);
-
-    this.lcd = null;
-  }
-
-  onVolumioStart() {
-    this.logger.info('[HD44780] Plugin start');
+module.exports = {
+  onVolumioStart: function () {
+    const configFile = path.join(__dirname, 'config.json');
+    config = JSON.parse(fs.readFileSync(configFile, 'utf8'));
     return true;
-  }
+  },
 
-  onStart() {
-    const address = this.config.get('i2cAddress') || 0x27;
-    const cols = parseInt(this.config.get('cols')) || 16;
-    const rows = parseInt(this.config.get('rows')) || 2;
-
-    this.logger.info(`[HD44780] Init LCD at address ${address}, ${cols}x${rows}`);
-
-    try {
-      this.lcd = new LcdDriver(address, cols, rows);
-      this.lcd.writeLine(0, 'Volumio Ready');
-    } catch (err) {
-      this.logger.error(`[HD44780] LCD init failed: ${err}`);
-    }
-
+  onStart: function () {
+    lcd = new LCDDriver(config.i2cAddress, config.cols, config.rows);
+    lcd.init().then(() => {
+      lcd.print('Volumio 3', 0);
+      lcd.print('HD44780 Ready', 1);
+    });
     return true;
-  }
+  },
 
-  onStop() {
-    if (this.lcd) {
-      this.lcd.clear();
-    }
+  onStop: function () {
+    if (lcd) lcd.clear();
     return true;
-  }
+  },
 
-  getUIConfig() {
-    return this.commandRouter.i18nJson(
-      __dirname + '/UIConfig.json',
-      __dirname + '/i18n/strings_en.json',
-      __dirname + '/i18n/strings_de.json'
-    );
-  }
+  getUIConfig: function () {
+    const uiconf = JSON.parse(fs.readFileSync(path.join(__dirname, 'UIConfig.json'), 'utf8'));
+    return uiconf;
+  },
 
-  saveConfig(data) {
-    this.config.set('i2cAddress', data['i2cAddress']);
-    this.config.set('cols', data['cols']);
-    this.config.set('rows', data['rows']);
+  saveConfig: function (data) {
+    config.i2cAddress = data.i2cAddress;
+    config.rows = data.rows;
+    config.cols = data.cols;
+    fs.writeFileSync(path.join(__dirname, 'config.json'), JSON.stringify(config, null, 2));
   }
 };
