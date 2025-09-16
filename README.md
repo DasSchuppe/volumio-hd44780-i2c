@@ -1,24 +1,11 @@
-\# Volumio HD44780 I2C Plugin
+# HD44780 LCD (I2C) Plugin for Volumio
 
+This plugin drives an HD44780 LCD connected via PCF8574 I2C backpack.
 
-
-Dieses Plugin zeigt Informationen (Track, Artist, Zeit) auf einem 16x2 oder 20x4 HD44780 LCD mit PCF8574 I²C Backpack an.
-
-
-
-\## Installation
-
-
+## Installation
 
 ```bash
-
 cd /data/plugins/miscellanea
-
-git clone https://github.com/<dein-user>/volumio-hd44780-i2c.git
-
+git clone https://github.com/DasSchuppe/volumio-hd44780-i2c.git
 cd volumio-hd44780-i2c
-
 volumio plugin install
-
-
-

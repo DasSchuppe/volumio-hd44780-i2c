@@ -1,40 +1,28 @@
 {
-  "page": {
-    "label": "HD44780 I2C LCD",
-    "sections": [
-      {
-        "title": "Display settings",
-        "content": "Configure your HD44780 I2C display."
-      }
-    ],
-    "options": [
-      {
-        "id": "i2cAddress",
-        "element": "input",
-        "type": "text",
-        "label": "I2C Address (hex, e.g. 0x27)",
-        "value": "0x27"
-      },
-      {
-        "id": "cols",
-        "element": "select",
-        "label": "Columns",
-        "value": "16",
-        "options": [
-          { "label": "16", "value": "16" },
-          { "label": "20", "value": "20" }
-        ]
-      },
-      {
-        "id": "rows",
-        "element": "select",
-        "label": "Rows",
-        "value": "2",
-        "options": [
-          { "label": "2", "value": "2" },
-          { "label": "4", "value": "4" }
-        ]
-      }
-    ]
-  }
+  "pages": [
+    {
+      "id": "hd44780",
+      "label": "HD44780 LCD",
+      "elements": [
+        {
+          "id": "i2cAddress",
+          "type": "text",
+          "label": "I2C Address",
+          "value": "0x27"
+        },
+        {
+          "id": "cols",
+          "type": "text",
+          "label": "Columns",
+          "value": "16"
+        },
+        {
+          "id": "rows",
+          "type": "text",
+          "label": "Rows",
+          "value": "2"
+        }
+      ]
+    }
+  ]
 }

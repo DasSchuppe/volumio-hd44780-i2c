@@ -1,15 +1,33 @@
 {
   "name": "volumio-hd44780-i2c",
-  "version": "1.0.1",
-  "description": "Volumio plugin for HD44780 LCD via PCF8574 (pure JS driver)",
+  "version": "1.0.0",
+  "description": "HD44780 LCD Plugin (I2C, PCF8574) for Volumio 3",
   "main": "index.js",
+  "scripts": {
+    "install": "sh install.sh",
+    "uninstall": "sh uninstall.sh"
+  },
   "author": "DasSchuppe",
   "license": "MIT",
   "volumio_info": {
-    "prettyName": "HD44780 I2C LCD (Pure JS)",
+    "prettyName": "HD44780 LCD (I2C)",
     "plugin_type": "miscellanea",
-    "version": "1.0.1",
-    "core_version": "3.0.0",
-    "homepage": "https://github.com/DasSchuppe/volumio-hd44780-i2c"
+    "icon": "fa-tachometer",
+    "version": "1.0.0",
+    "platforms": [
+      "arm",
+      "x86"
+    ],
+    "architectures": [
+      "armhf",
+      "arm64",
+      "x86",
+      "x64"
+    ],
+    "volumio_version": ">=3.0.0"
+  },
+  "dependencies": {
+    "i2c-bus": "^5.2.3",
+    "lcd": "^0.2.5"
   }
 }

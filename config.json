@@ -1,6 +1,5 @@
 {
-  "enabled": true,
-  "i2cAddress": 39,
-  "cols": 16,
-  "rows": 2
+  "i2cAddress": "0x27",
+  "cols": "16",
+  "rows": "2"
 }
